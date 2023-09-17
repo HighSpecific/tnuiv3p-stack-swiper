@@ -1,0 +1,3 @@
+export const MAX_SWIPER_COUNT = 10
+export const DEFAULT_SWITCH_DISTANCE = 50
+export const SWIPER_ANIMATION_DURATION = 300
