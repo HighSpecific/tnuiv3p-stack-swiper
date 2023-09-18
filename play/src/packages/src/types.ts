@@ -54,7 +54,7 @@ export const stackSwiperProps = buildProps({
    */
   switchRate: {
     type: Number,
-    default: 0.13,
+    default: 0.1,
   },
   /**
    * @description item之间的缩放比例, 0 ~ 1
