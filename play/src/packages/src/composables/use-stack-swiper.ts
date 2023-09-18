@@ -135,6 +135,11 @@ export const useStackSwiper = (
   // item触摸事件
   const itemTouchHandle = (distanceX: number, distanceY: number) => {
     if (props.slideDirection === 'horizontal') {
+      if (
+        Math.abs(distanceX) >
+        containerWidth.value * (1 - (props.scaleRate || 0))
+      )
+        return
       // 判断是向左滑动还是向右滑动
       const sliderLeft = distanceX < 0
       // 计算滑动的比例
@@ -171,6 +176,11 @@ export const useStackSwiper = (
         }
       }
     } else if (props.slideDirection === 'vertical') {
+      if (
+        Math.abs(distanceY) >
+        containerHeight.value * (1 - (props.scaleRate || 0))
+      )
+        return
       // 判断是向上滑动还是向下滑动
       const sliderTop = distanceY < 0
       // 计算滑动的比例
@@ -209,6 +219,21 @@ export const useStackSwiper = (
     }
   }
 
+  // 暂停自动轮播
+  const pauseAutoplay = () => {
+    if (!autoPlayIntervalTimer || !props.autoplay) return
+    clearInterval(autoPlayIntervalTimer)
+    autoPlayIntervalTimer = null
+  }
+
+  // 开始自动轮播
+  const startAutoplay = () => {
+    if (!!autoPlayIntervalTimer || !props.autoplay) return
+    autoPlayIntervalTimer = setInterval(() => {
+      switchSwiperItem('next')
+    }, props.interval)
+  }
+
   // 更新所有item的样式
   const _updateSwiperItemStyle = (init = false) => {
     for (let i = 0; i < swiperItemCount.value; i++) {
@@ -238,14 +263,7 @@ export const useStackSwiper = (
       nextTick(() => {
         _updateSwiperItemStyle(true)
 
-        if (props.autoplay) {
-          setTimeout(() => {
-            // 是否设置了自动博凡
-            autoPlayIntervalTimer = setInterval(() => {
-              switchSwiperItem('next')
-            }, props.interval)
-          }, 150)
-        }
+        startAutoplay()
       })
     } catch (err) {
       if (initCount > 10) {
@@ -265,6 +283,8 @@ export const useStackSwiper = (
     reactive({
       ...props,
       sliderSwitchDistance,
+      containerWidth,
+      containerHeight,
       items,
       activeUid,
       addItem,
@@ -272,6 +292,8 @@ export const useStackSwiper = (
       switchSwiperItem,
       itemClickHandle,
       itemTouchHandle,
+      pauseAutoplay,
+      startAutoplay,
     })
   )
 

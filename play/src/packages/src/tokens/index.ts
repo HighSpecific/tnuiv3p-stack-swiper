@@ -10,6 +10,8 @@ export type StackSwiperItemContext = {
 
 export type StackSwiperContext = Pick<StackSwiperProps, 'slideDirection'> & {
   sliderSwitchDistance: number
+  containerWidth: number
+  containerHeight: number
   items: StackSwiperItemContext[]
   activeUid: number
   addItem: (item: StackSwiperItemContext) => void
@@ -17,6 +19,8 @@ export type StackSwiperContext = Pick<StackSwiperProps, 'slideDirection'> & {
   switchSwiperItem: (event: SwitchSwiperItemEvent) => void
   itemClickHandle: () => void
   itemTouchHandle: (distanceX: number, distanceY: number) => void
+  pauseAutoplay: () => void
+  startAutoplay: () => void
 }
 
 export const stackSwiperContextKey: InjectionKey<StackSwiperContext> = Symbol(

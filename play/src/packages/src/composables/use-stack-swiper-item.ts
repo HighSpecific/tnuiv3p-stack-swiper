@@ -45,6 +45,7 @@ export const useStackSwiperItem = () => {
     touchStartY = touch.clientY
     touchStartTime = Date.now()
     startTouchFlag = true
+    stackSwiperContext?.pauseAutoplay()
   }
   const moveTouchHandle = (e: TouchEvent) => {
     const touch = e.changedTouches?.[0]
@@ -64,16 +65,16 @@ export const useStackSwiperItem = () => {
     const touch = e.changedTouches?.[0]
     if (!startTouchFlag || !touch) return
     const { clientX, clientY } = touch
+    // 计算滑动距离
+    let touchDistance = 0
+    if (stackSwiperContext?.slideDirection === 'horizontal') {
+      touchDistance = clientX - touchStartX
+    } else if (stackSwiperContext?.slideDirection === 'vertical') {
+      touchDistance = clientY - touchStartY
+    }
     const nowTime = Date.now()
     // 判断是否为点击事件/切换item事件
     if (nowTime - touchStartTime < 300) {
-      // 结算滑动距离
-      let touchDistance = 0
-      if (stackSwiperContext?.slideDirection === 'horizontal') {
-        touchDistance = clientX - touchStartX
-      } else if (stackSwiperContext?.slideDirection === 'vertical') {
-        touchDistance = clientY - touchStartY
-      }
       if (Math.abs(touchDistance) < 5) {
         // 点击事件
         itemClickHandle()
@@ -96,13 +97,33 @@ export const useStackSwiperItem = () => {
         }
       }
     } else {
-      // 重置当前item的位置
-      stackSwiperContext?.switchSwiperItem('reset')
+      // 如果到达了切换的临界值也进行切换
+      if (
+        (stackSwiperContext?.slideDirection === 'horizontal' &&
+          -touchDistance > stackSwiperContext?.containerWidth * (2 / 3)) ||
+        (stackSwiperContext?.slideDirection === 'vertical' &&
+          -touchDistance > stackSwiperContext?.containerHeight * (2 / 3))
+      ) {
+        // 切换下一个元素
+        stackSwiperContext?.switchSwiperItem('next')
+      } else if (
+        (stackSwiperContext?.slideDirection === 'horizontal' &&
+          touchDistance > stackSwiperContext?.containerWidth * (2 / 3)) ||
+        (stackSwiperContext?.slideDirection === 'vertical' &&
+          touchDistance > stackSwiperContext?.containerHeight * (2 / 3))
+      ) {
+        // 切换上一个元素
+        stackSwiperContext?.switchSwiperItem('prev')
+      } else {
+        // 重置当前item的位置
+        stackSwiperContext?.switchSwiperItem('reset')
+      }
     }
 
     touchStartX = 0
     touchStartY = 0
     startTouchFlag = false
+    stackSwiperContext?.startAutoplay()
   }
 
   onMounted(() => {
