@@ -1,8 +1,13 @@
 <script lang="ts" setup>
 import { useStackSwiperCustomStyle, useStackSwiperItem } from './composables'
 
-const { swiperItemStyle, startTouchHandle, moveTouchHandle, endTouchHandle } =
-  useStackSwiperItem()
+const {
+  sliderDirection,
+  swiperItemStyle,
+  startTouchHandle,
+  moveTouchHandle,
+  endTouchHandle,
+} = useStackSwiperItem()
 const { itemNs } = useStackSwiperCustomStyle()
 </script>
 
@@ -19,9 +24,20 @@ export default {
 
 <template>
   <view
+    v-if="sliderDirection === 'horizontal'"
     :class="[itemNs.b()]"
     :style="swiperItemStyle"
     @touchstart="startTouchHandle"
+    @touchmove="moveTouchHandle"
+    @touchend="endTouchHandle"
+  >
+    <slot />
+  </view>
+  <view
+    v-if="sliderDirection === 'vertical'"
+    :class="[itemNs.b()]"
+    :style="swiperItemStyle"
+    @touchstart.stop.prevent="startTouchHandle"
     @touchmove="moveTouchHandle"
     @touchend="endTouchHandle"
   >

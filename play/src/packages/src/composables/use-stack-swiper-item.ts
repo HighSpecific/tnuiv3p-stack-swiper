@@ -38,6 +38,7 @@ export const useStackSwiperItem = () => {
   // 通过滑动的时间来判断是否是点击事件
   let touchStartTime = 0
   const startTouchHandle = (e: TouchEvent) => {
+    e.preventDefault()
     const touch = e.changedTouches?.[0]
     if (!touch) return
     touchStartX = touch.clientX
@@ -115,6 +116,7 @@ export const useStackSwiperItem = () => {
   })
 
   return {
+    sliderDirection: stackSwiperContext?.slideDirection,
     swiperItemStyle,
     itemClickHandle,
     startTouchHandle,

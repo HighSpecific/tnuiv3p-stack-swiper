@@ -3,6 +3,7 @@ import {
   getCurrentInstance,
   nextTick,
   onMounted,
+  onUnmounted,
   provide,
   reactive,
   ref,
@@ -59,6 +60,9 @@ export const useStackSwiper = (
     containerWidth,
     containerHeight
   )
+
+  // 自动轮播定时器
+  let autoPlayIntervalTimer: ReturnType<typeof setInterval> | null = null
 
   // 当前激活的索引值
   const currentIndex = ref(0)
@@ -233,6 +237,15 @@ export const useStackSwiper = (
       containerWidth.value = rectInfo.width || 0
       nextTick(() => {
         _updateSwiperItemStyle(true)
+
+        if (props.autoplay) {
+          setTimeout(() => {
+            // 是否设置了自动博凡
+            autoPlayIntervalTimer = setInterval(() => {
+              switchSwiperItem('next')
+            }, props.interval)
+          }, 150)
+        }
       })
     } catch (err) {
       if (initCount > 10) {
@@ -266,6 +279,13 @@ export const useStackSwiper = (
     nextTick(() => {
       getStackSwiperContainer()
     })
+  })
+
+  onUnmounted(() => {
+    if (autoPlayIntervalTimer) {
+      clearInterval(autoPlayIntervalTimer)
+      autoPlayIntervalTimer = null
+    }
   })
 
   return {

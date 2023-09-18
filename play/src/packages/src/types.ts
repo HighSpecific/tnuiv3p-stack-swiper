@@ -10,6 +10,9 @@ export const stackSwiperSlideDirection = ['horizontal', 'vertical'] as const
 export type StackSwiperSlideDirection =
   (typeof stackSwiperSlideDirection)[number]
 
+export const stackScaleDirection = ['top', 'bottom', 'left', 'right'] as const
+export type StackScaleDirection = (typeof stackScaleDirection)[number]
+
 export const stackSwiperProps = buildProps({
   /**
    * @description 当前显示得轮播索引
@@ -54,18 +57,18 @@ export const stackSwiperProps = buildProps({
     default: 0.13,
   },
   /**
-   * @description item之间得缩放比例, 0 ~ 1
+   * @description item之间的缩放比例, 0 ~ 1
    */
   scaleRate: {
     type: Number,
     default: 0.08,
   },
   /**
-   * @description item之间得透明度, 0 ~ 1
+   * @description item之间的透明度, 0 ~ 1
    */
   opacityRate: {
     type: Number,
-    default: 0.1,
+    default: 0.18,
   },
   /**
    * @description 轮播滑动方向
@@ -74,6 +77,14 @@ export const stackSwiperProps = buildProps({
     type: String,
     values: stackSwiperSlideDirection,
     default: 'horizontal',
+  },
+  /**
+   * @description 缩放的方向
+   */
+  scaleDirection: {
+    type: String,
+    values: stackScaleDirection,
+    default: '',
   },
 })
 

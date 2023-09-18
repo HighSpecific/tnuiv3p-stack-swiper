@@ -6,7 +6,7 @@ import TnStackSwiperItem from '../../packages/src/item.vue'
 <template>
   <view class="content">
     <view class="swiper">
-      <TnStackSwiper>
+      <TnStackSwiper autoplay>
         <TnStackSwiperItem>
           <view class="swiper-item tn-bluepurple_bg">1</view>
         </TnStackSwiperItem>
