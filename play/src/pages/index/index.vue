@@ -1,12 +1,23 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import TnStackSwiper from '../../packages/src/index.vue'
 import TnStackSwiperItem from '../../packages/src/item.vue'
+
+const currentIndex = ref<number>(0)
+
+setInterval(() => {
+  currentIndex.value = 2
+}, 3000)
+
+setInterval(() => {
+  currentIndex.value = 1
+}, 8000)
 </script>
 
 <template>
   <view class="content">
     <view class="swiper">
-      <TnStackSwiper autoplay>
+      <TnStackSwiper v-model="currentIndex">
         <TnStackSwiperItem>
           <view class="swiper-item tn-bluepurple_bg">1</view>
         </TnStackSwiperItem>

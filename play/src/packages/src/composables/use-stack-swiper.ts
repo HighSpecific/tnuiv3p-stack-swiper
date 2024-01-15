@@ -71,6 +71,11 @@ export const useStackSwiper = (
     () => props.modelValue,
     (val) => {
       currentIndex.value = val || 0
+      if (val !== undefined) {
+        setTimeout(() => {
+          _updateSwiperItemStyle()
+        }, 50)
+      }
     }
   )
   const nextSwiperIndex = computed<number>(() => {
